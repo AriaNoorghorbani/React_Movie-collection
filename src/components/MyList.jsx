@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Box from "./Box";
 import List from "./List";
 import Summary from "./Summary";
 
@@ -29,10 +30,7 @@ export default function MyList({ isOpen, setIsOpen }) {
   const [watched, setWatched] = useState(tempWatchedData);
 
   return (
-    <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
-        {isOpen ? "–" : "+"}
-      </button>
+    <Box setIsOpen={setIsOpen} isOpen={isOpen}>
       {isOpen && (
         <>
           <Summary watched={watched} />
@@ -40,6 +38,6 @@ export default function MyList({ isOpen, setIsOpen }) {
           <List watched={watched} />
         </>
       )}
-    </div>
+    </Box>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import MovieList from "./components/MovieList";
 import MyList from "./components/MyList";
 import Navbar from "./components/Navbar";
+import Stars from "./components/Stars";
 
 const tempMovieData = [
   {
@@ -46,18 +47,21 @@ export default function App() {
   }
 
   return (
+    // <>
+    //   <Navbar movies={movies} />
+
+    //   <main className="main">
+    //     <MovieList
+    //       isOpen={isOpen.movieList}
+    //       setIsOpen={toggleMovieList}
+    //       movies={movies}
+    //     />
+
+    //     <MyList isOpen={isOpen.myList} setIsOpen={toggleMyList} />
+    //   </main>
+    // </>
     <>
-      <Navbar movies={movies} />
-
-      <main className="main">
-        <MovieList
-          isOpen={isOpen.movieList}
-          setIsOpen={toggleMovieList}
-          movies={movies}
-        />
-
-        <MyList isOpen={isOpen.myList} setIsOpen={toggleMyList} />
-      </main>
+      <Stars maxLength={10} />
     </>
   );
 }

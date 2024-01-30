@@ -1,39 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieList from "./components/MovieList";
 import MyList from "./components/MyList";
 import Navbar from "./components/Navbar";
-import Stars from "./components/Stars";
 
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
+const tempMovieData = [];
+
+const API = "http://www.omdbapi.com/?apikey=3f9130e2";
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [fetching, setFetching] = useState(false);
   const [isOpen, setIsOpen] = useState({
     movieList: true,
     myList: true,
   });
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    async function fetchMovies() {
+      setFetching(true);
+      const res = await fetch(`${API}&s=${query}`);
+      const resData = await res.json();
+      setMovies(resData.Search);
+      setFetching(false);
+    }
+    fetchMovies();
+  }, [query]);
 
   function toggleMovieList() {
     setIsOpen((prevState) => ({
@@ -46,22 +38,25 @@ export default function App() {
     setIsOpen((prevState) => ({ ...prevState, myList: !prevState.myList }));
   }
 
+  function handleSearch(query) {
+    setQuery(query);
+  }
+
   return (
-    // <>
-    //   <Navbar movies={movies} />
-
-    //   <main className="main">
-    //     <MovieList
-    //       isOpen={isOpen.movieList}
-    //       setIsOpen={toggleMovieList}
-    //       movies={movies}
-    //     />
-
-    //     <MyList isOpen={isOpen.myList} setIsOpen={toggleMyList} />
-    //   </main>
-    // </>
     <>
-      <Stars maxLength={10} />
+      <Navbar movies={movies} setQuery={handleSearch} query={query} />
+
+      <main className="main">
+        {fetching && <p>Loading...</p>}
+        <MovieList
+          isOpen={isOpen.movieList}
+          setIsOpen={toggleMovieList}
+          movies={movies}
+        />
+
+        <MyList isOpen={isOpen.myList} setIsOpen={toggleMyList} />
+        {/* <Stars maxLength={10} /> */}
+      </main>
     </>
   );
 }

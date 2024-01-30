@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
-export default function Navbar({ movies }) {
-  const [query, setQuery] = useState("");
+export default function Navbar({ movies, setQuery, query }) {
+  // const [query, setQuery] = useState("");
+
+  function handleSearch(e) {
+    setQuery(e.target.value);
+  }
 
   return (
     <nav className="nav-bar">
@@ -14,11 +18,13 @@ export default function Navbar({ movies }) {
         type="text"
         placeholder="Search movies..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => handleSearch(e)}
       />
-      <p className="num-results">
-        Found <strong>{movies.length}</strong> results
-      </p>
+      {movies && (
+        <p className="num-results">
+          Found <strong>{movies.length}</strong> results
+        </p>
+      )}
     </nav>
   );
 }
